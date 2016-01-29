@@ -169,7 +169,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 			'domain_path' => $plugin['DomainPath'],
 			'network' => $plugin['Network'],
 			'title' => $plugin['Title'],
-			'author_name' => $plugin['AuthorName']
+			'author_name' => $plugin['AuthorName'],
 		);
 
 			return $data;

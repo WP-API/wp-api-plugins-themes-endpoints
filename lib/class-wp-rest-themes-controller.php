@@ -36,7 +36,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 		) );
 	}
 
+	/**
+	 * Check if a given request has access to read /themes.
+	 *
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return WP_Error|boolean
+	 */
 	public function get_items_permissions_check( $request ) {
+
+		return current_user_can( 'switch_themes' );
 
 	}
 

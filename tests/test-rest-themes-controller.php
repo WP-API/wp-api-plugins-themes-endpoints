@@ -8,6 +8,17 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertArrayHasKey( '/wp/v2/themes/(?P<id>[\d]+)', $routes );
 	}
 
+	public function test_get_items_without_permissions() {
+		wp_set_current_user( 0 );
+
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+
+		$response = $this->server->dispatch($request);
+
+		$this->assertEquals(403, $response->get_status());
+
+	}
+
 	public function test_context_param() {
 
 	}

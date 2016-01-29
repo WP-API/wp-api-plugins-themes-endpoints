@@ -19,7 +19,7 @@ function plugins_themes_rest_api_init() {
         && ! class_exists( 'WP_REST_Themes_Controller' ) ) {
         require_once dirname( __FILE__ ) . '/lib/class-wp-rest-themes-controller.php';
     }
-    
+
 	$plugins_controller = new WP_REST_Plugins_Controller();
 	$plugins_controller->register_routes();
 

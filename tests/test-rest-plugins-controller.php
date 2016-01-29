@@ -17,7 +17,10 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_item() {
+        $request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/plugins' ) );
+        $response = $this->server->dispatch( $request );
 
+        $this->check_get_plugins_response( $response, 'view' );
 	}
 
 	public function test_create_item() {
@@ -40,4 +43,29 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 	}
 
+    protected function check_get_plugins_response( $response, $context = 'view' ) {
+        $this->assertNotInstanceOf( 'WP_Error', $response );
+        $response = rest_ensure_response( $response );
+        $this->assertEquals( 200, $response->get_status() );
+
+        $all_data = $response->get_data();
+        $data = $all_data[0];
+
+        $plugin = []; // fixme - get theme object
+        $this->check_plugin_data( $plugin );
+    }
+
+    protected function check_get_plugin_response( $response, $context = 'view' ) {
+        $this->assertNotInstanceOf( 'WP_Error', $response );
+        $response = rest_ensure_response( $response );
+        $this->assertEquals( 200, $response->get_status() );
+
+        $data = $response->get_data();
+        $post = get_post( $data['id'] );
+        $this->check_plugin_data( $post, $data, $context );
+    }
+
+    protected function check_plugin_data( $plugin ) {
+        // todo: add plugin assertions
+    }
 }

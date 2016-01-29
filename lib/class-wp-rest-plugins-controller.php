@@ -158,6 +158,20 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 
 	public function prepare_item_for_response( $plugin, $request ) {
-		return $plugin;
+		$data = array(
+			'name' => $plugin['Name'],
+			'plugin_uri' => $plugin['PluginURI'],
+			'version' => $plugin['Version'],
+			'description' => $plugin['Description'],
+			'author' => $plugin['Author'],
+			'author_uri' => $plugin['AuthorURI'],
+			'text_domain' => $plugin['TextDomain'],
+			'domain_path' => $plugin['DomainPath'],
+			'network' => $plugin['Network'],
+			'title' => $plugin['Title'],
+			'author_name' => $plugin['AuthorName']
+		);
+
+			return $data;
 	}
 }

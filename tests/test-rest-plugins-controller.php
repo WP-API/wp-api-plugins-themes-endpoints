@@ -17,7 +17,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_item() {
-        $request = new WP_REST_Request( 'GET', sprintf( '/wp/v2/plugins' ) );
+        $request = new WP_REST_Request( 'GET', '/wp/v2/plugins/wp-api' );
         $response = $this->server->dispatch( $request );
 
         $this->check_get_plugins_response( $response, 'view' );
@@ -47,9 +47,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
         $this->assertNotInstanceOf( 'WP_Error', $response );
         $response = rest_ensure_response( $response );
         $this->assertEquals( 200, $response->get_status() );
-
-        $all_data = $response->get_data();
-        $data = $all_data[0];
+        $theme_data = $response->get_data();
 
         $plugin = []; // fixme - get theme object
         $this->check_plugin_data( $plugin );

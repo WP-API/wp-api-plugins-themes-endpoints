@@ -40,11 +40,11 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to read /themes.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @return boolean
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		return current_user_can( 'switch_themes' );
+		return $this->get_item_permissions_check( $request );
 
 	}
 
@@ -52,7 +52,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 
 	}
 
+	/**
+	 * Check if a given request has access to read /theme/{theme-name}
+	 *
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return boolean
+	 */
 	public function get_item_permissions_check( $request ) {
+
+		return current_user_can( 'switch_themes' );
 
 	}
 
@@ -60,7 +68,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 
 	}
 
+	/**
+	 * check if a request can delete a theme
+	 *
+	 * @param WP_REST_Request $request
+	 * @return boolean
+	 */
 	public function delete_item_permission_check( $request ) {
+
+		return current_user_can( 'delete_themes' );
 
 	}
 

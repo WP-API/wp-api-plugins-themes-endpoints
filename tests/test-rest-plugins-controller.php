@@ -19,6 +19,18 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 	}
 
+	public function test_delete_item_without_permission() {
+
+		wp_set_current_user( 0 );
+
+		$request = new WP_REST_Request( WP_REST_Server::DELETABLE, '/wp/v2/plugins/hello-dolly' );
+
+		$response = $this->server->dispatch($request);
+
+		$this->assertEquals(403, $response->get_status());
+
+	}
+
 	public function test_context_param() {
 
 	}
@@ -27,7 +39,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 2, count( $data ) );
+		$this->assertEquals( 3, count( $data ) );
 	}
 
 	public function test_get_item() {

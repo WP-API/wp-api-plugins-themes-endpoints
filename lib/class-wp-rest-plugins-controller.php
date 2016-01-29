@@ -40,11 +40,11 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to read /plugins.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @return boolean
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		return current_user_can( 'activate_plugins' );
+		return $this->get_item_permissions_check( $request );
 
 	}
 
@@ -64,7 +64,17 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 		return rest_ensure_response( $data );
 	}
 
+	/**
+	 * check if a given request has access to read /plugins/{plugin-name}
+	 *
+	 * TODO: is this the correct capability to use ?
+	 *
+	 * @param WP_REST_Request $request
+	 * @return boolean
+	 */
 	public function get_item_permissions_check( $request ) {
+
+		return current_user_can( 'activate_plugins' );
 
 	}
 
@@ -72,7 +82,15 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 	}
 
+	/**
+	 * check if a given request has access to delete a plugin
+	 *
+	 * @param WP_REST_Request $request
+	 * @return boolean
+	 */
 	public function delete_item_permission_check( $request ) {
+
+		return current_user_can( 'delete_plugins' );
 
 	}
 

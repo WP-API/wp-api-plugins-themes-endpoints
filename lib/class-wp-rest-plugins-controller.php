@@ -37,11 +37,23 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	}
 
 	public function get_items_permissions_check( $request ) {
-
+		return true;
 	}
 
 	public function get_items( $request ) {
+		$data = array();
 
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
+		foreach ( get_plugins() as $obj ) {
+			$plugin = $this->prepare_item_for_response( $obj, $request );
+			if ( is_wp_error( $plugin ) ) {
+				continue;
+			}
+
+			$data[ $obj['Name'] ] = $this->prepare_response_for_collection( $plugin );
+		}
+
+		return rest_ensure_response( $data );
 	}
 
 	public function get_item_permissions_check( $request ) {
@@ -61,11 +73,63 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	}
 
 	public function prepare_item_for_response( $item, $request ) {
-
+		return $item;
 	}
 
 	public function get_item_schema() {
+		$schema = array(
+			'$schema'              => 'http://json-schema.org/draft-04/schema#',
+			'title'                => 'plugin',
+			'type'                 => 'object',
+			'properties'           => array(
+				'name'        => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'plugin_uri'   => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'version'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'description'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'author'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'author_uri'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'text_domain'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'domain_path'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'network'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'title'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				'author_name'     => array(
+					'description'  => __( 'The title for the resource.' ),
+					'type'         => 'string',
+					),
+				),
+			);
 
+		return $this->add_additional_fields_schema( $schema );
 	}
 
 	public function get_collection_params() {

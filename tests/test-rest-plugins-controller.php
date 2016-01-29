@@ -13,7 +13,10 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_items() {
-
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+		$this->assertEquals( 2, count( $data ) );
 	}
 
 	public function test_get_item() {

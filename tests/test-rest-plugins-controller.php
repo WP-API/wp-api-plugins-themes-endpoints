@@ -1,6 +1,6 @@
 <?php
 
-class WP_Test_REST_Plugins_Controller extends WP_Test_REST_TestCase {
+class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();

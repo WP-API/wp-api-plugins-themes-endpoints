@@ -69,7 +69,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	}
 
 	public function get_collection_params() {
-
+		return array();
 	}
 
 }

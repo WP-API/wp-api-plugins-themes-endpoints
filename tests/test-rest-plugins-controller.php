@@ -51,7 +51,22 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_item_schema() {
-
+		$request = new WP_REST_Request( 'OPTIONS', '/wp/v2/plugins' );
+		$response = $this->server->dispatch( $request );
+		$data = $response->get_data();
+		$properties = $data['schema']['properties'];
+		$this->assertEquals( 11, count( $properties ) );
+		$this->assertArrayHasKey( 'name', $properties );
+		$this->assertArrayHasKey( 'plugin_uri', $properties );
+		$this->assertArrayHasKey( 'version', $properties );
+		$this->assertArrayHasKey( 'description', $properties );
+		$this->assertArrayHasKey( 'author', $properties );
+		$this->assertArrayHasKey( 'author_uri', $properties );
+		$this->assertArrayHasKey( 'text_domain', $properties );
+		$this->assertArrayHasKey( 'domain_path', $properties );
+		$this->assertArrayHasKey( 'network', $properties );
+		$this->assertArrayHasKey( 'title', $properties );
+		$this->assertArrayHasKey( 'author_name', $properties );
 	}
 
 }

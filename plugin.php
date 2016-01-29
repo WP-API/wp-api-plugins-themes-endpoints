@@ -9,6 +9,14 @@
  * License: GPL2+
  */
 
+function plugins_themes_rest_api_init() {
+	$plugins_controller = new WP_REST_Plugins_Controller();
+	$plugins_controller->register_routes();
+
+	$themes_controller = new WP_REST_Themes_Controller();
+	$themes_controller->register_routes();
+}
+
 if ( class_exists( 'WP_REST_Controller' )
 	&& ! class_exists( 'WP_REST_Plugins_Controller' ) ) {
 	require_once dirname( __FILE__ ) . '/lib/class-wp-rest-plugins-controller.php';
@@ -18,3 +26,5 @@ if ( class_exists( 'WP_REST_Controller' )
 	&& ! class_exists( 'WP_REST_Themes_Controller' ) ) {
 	require_once dirname( __FILE__ ) . '/lib/class-wp-rest-themes-controller.php';
 }
+
+add_action( 'rest_api_init', plugins_themes_rest_api_init );

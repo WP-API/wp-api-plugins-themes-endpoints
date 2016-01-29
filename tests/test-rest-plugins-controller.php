@@ -28,9 +28,8 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 2, count( $data ) );
-		$this->assertArrayHasKey( 'akismet', $data );
-		$this->assertArrayHasKey( 'hello-dolly', $data );
-		// TODO: Check array values.
+		// TODO: Check values.
+		$this->assertEquals( 'Akismet', $data[0]['name'] );
 	}
 
 	public function test_get_item() {

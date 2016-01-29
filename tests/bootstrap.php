@@ -23,8 +23,8 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	$test_root = getenv( 'WP_TESTS_DIR' );
 } else if ( false !== getenv( 'WP_ROOT_DIR' ) ) {
 	$test_root = getenv( 'WP_ROOT_DIR' ) . '/tests/phpunit';
-} else if ( file_exists( '../../../../tests/phpunit/includes/bootstrap.php' ) ) {
-	$test_root = '../../../../tests/phpunit';
+} else if ( file_exists( dirname( __FILE__ ) . '/../../../../tests/phpunit/includes/bootstrap.php' ) ) {
+	$test_root = dirname( __FILE__ ) . '/../../../../tests/phpunit';
 } else if ( file_exists( '/tmp/wordpress-tests-lib/includes/bootstrap.php' ) ) {
 	$test_root = '/tmp/wordpress-tests-lib';
 }

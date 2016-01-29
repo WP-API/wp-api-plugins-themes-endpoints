@@ -102,18 +102,8 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( 200, $response->get_status() );
 		$theme_data = $response->get_data();
 
-		$plugin = []; // fixme - get theme object
+		$plugin = array(); // fixme - get theme object
 		$this->check_plugin_data( $plugin );
-	}
-
-	protected function check_get_plugin_response( $response, $context = 'view' ) {
-		$this->assertNotInstanceOf( 'WP_Error', $response );
-		$response = rest_ensure_response( $response );
-		$this->assertEquals( 200, $response->get_status() );
-
-		$data = $response->get_data();
-		$post = get_post( $data['id'] );
-		$this->check_plugin_data( $post, $data, $context );
 	}
 
 	protected function check_plugin_data( $plugin ) {

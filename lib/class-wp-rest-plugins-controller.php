@@ -52,13 +52,13 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 		$slug = $request['slug'];
 		$plugin = null;
 
-        $plugins = get_plugins();
-        foreach( $plugins as $name => $active_plugin ) {
-            if( array_values( preg_split( '/\//', $name ) )[0] == $slug ) {
-                $plugin = $active_plugin;
-                break;
-            }
-        }
+		$plugins = get_plugins();
+		foreach( $plugins as $name => $active_plugin ) {
+			if( array_values( preg_split( '/\//', $name ) )[0] == $slug ) {
+				$plugin = $active_plugin;
+				break;
+			}
+		}
 
 		if ( ! $plugin ) {
 			return new WP_Error( 'rest_post_invalid_id', __( 'Invalid post id.' ), array( 'status' => 404 ) );

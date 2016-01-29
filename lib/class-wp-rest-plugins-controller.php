@@ -33,6 +33,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'delete_item' ),
 				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
 			),
+			'schema' => array( $this, 'get_item_schema' ),
 		) );
 	}
 

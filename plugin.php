@@ -11,10 +11,10 @@
 
 if ( class_exists( 'WP_REST_Controller' )
 	&& ! class_exists( 'WP_REST_Plugins_Controller' ) ) {
-	require_once dirname( __FILE__ ) . '/class-wp-rest-plugins-controller.php';
+	require_once dirname( __FILE__ ) . '/lib/class-wp-rest-plugins-controller.php';
 }
 
 if ( class_exists( 'WP_REST_Controller' )
 	&& ! class_exists( 'WP_REST_Themes_Controller' ) ) {
-	require_once dirname( __FILE__ ) . '/class-wp-rest-themes-controller.php';
+	require_once dirname( __FILE__ ) . '/lib/class-wp-rest-themes-controller.php';
 }

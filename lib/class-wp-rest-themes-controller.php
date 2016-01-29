@@ -40,7 +40,7 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	}
 
 	public function prepare_item_for_response( $item, $request ) {
-		
+
 	}
 
 	public function get_item_schema() {
@@ -48,7 +48,7 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	}
 
 	public function get_collection_params() {
-		
+
 	}
 
 }

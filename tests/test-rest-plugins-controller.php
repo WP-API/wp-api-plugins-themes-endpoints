@@ -31,7 +31,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_item() {
-		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello.php' );
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello-dolly' );
 		$response = $this->server->dispatch( $request );
 
 		$this->check_get_plugins_response( $response, 'view' );

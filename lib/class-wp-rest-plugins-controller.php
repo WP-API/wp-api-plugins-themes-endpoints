@@ -22,7 +22,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
 
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<slug>[\w-]+)', array(
 			array(
 				'methods'         => WP_REST_Server::READABLE,
 				'callback'        => array( $this, 'get_item' ),
@@ -33,6 +33,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 				'callback' => array( $this, 'delete_item' ),
 				'permission_callback' => array( $this, 'delete_item_permissions_check' ),
 			),
+			'schema' => array( $this, 'get_item_schema' ),
 		) );
 	}
 
@@ -79,6 +80,25 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	}
 
 	public function get_item( $request ) {
+		$slug = $request['slug'];
+		$plugin = null;
+
+		$plugins = get_plugins();
+		foreach( $plugins as $name => $active_plugin ) {
+			if( array_values( preg_split( '/\//', $name ) )[0] == $slug ) {
+				$plugin = $active_plugin;
+				break;
+			}
+		}
+
+		if ( ! $plugin ) {
+			return new WP_Error( 'rest_post_invalid_id', __( 'Invalid post id.' ), array( 'status' => 404 ) );
+		}
+
+		$data = $this->prepare_item_for_response( $plugin, $request );
+		$response = rest_ensure_response( $data );
+
+		return $response;
 
 	}
 
@@ -92,14 +112,6 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 		return current_user_can( 'delete_plugins' );
 
-	}
-
-	public function delete_item( $request ) {
-
-	}
-
-	public function prepare_item_for_response( $item, $request ) {
-		return $item;
 	}
 
 	public function get_item_schema() {
@@ -162,4 +174,8 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 		return array();
 	}
 
+
+	public function prepare_item_for_response( $plugin, $request ) {
+		return array('plugin' => 'get plugin data');
+	}
 }

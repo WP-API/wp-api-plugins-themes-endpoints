@@ -25,9 +25,9 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$request = new WP_REST_Request( WP_REST_Server::DELETABLE, '/wp/v2/themes/theme-name' );
 
-		$response = $this->server->dispatch($request);
+		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals(403, $response->get_status());
+		$this->assertEquals( 403, $response->get_status() );
 
 	}
 

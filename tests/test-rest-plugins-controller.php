@@ -23,9 +23,9 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$request = new WP_REST_Request( WP_REST_Server::DELETABLE, '/wp/v2/plugins/hello-dolly' );
 
-		$response = $this->server->dispatch($request);
+		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals(403, $response->get_status());
+		$this->assertEquals( 403, $response->get_status() );
 
 	}
 

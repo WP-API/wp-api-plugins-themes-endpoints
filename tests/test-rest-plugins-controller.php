@@ -39,14 +39,13 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$response = $this->server->dispatch( $request );
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
-
-		$this->assertArrayHasKey( 'akismet', $data );
-		$this->assertArrayHasKey( 'hello-dolly', $data );
-		// TODO: Check array values.
+		$this->assertEquals( 2, count( $data ) );
+		// TODO: Check values.
+		$this->assertEquals( 'Akismet', $data[0]['name'] );
 	}
 
 	public function test_get_item() {
-		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello.php' );
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello-dolly' );
 		$response = $this->server->dispatch( $request );
 
 		$this->check_get_plugins_response( $response, 'view' );

@@ -45,11 +45,12 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		return $this->get_item_permissions_check( $request );
+		return current_user_can( 'manage_options' ); // TODO: Something related to plugins.
 
 	}
 
 	public function get_items( $request ) {
+
 		$data = array();
 
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
@@ -59,7 +60,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 				continue;
 			}
 
-			$data[ sanitize_title( $obj['Name'] ) ] = $this->prepare_response_for_collection( $plugin );
+			$data[] = $this->prepare_response_for_collection( $plugin );
 		}
 
 		return rest_ensure_response( $data );
@@ -85,8 +86,10 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		$plugins = get_plugins();
-		foreach ( $plugins as $name => $active_plugin ) {
-			if ( array_values( preg_split( '/\//', $name ) )[0] === $slug ) {
+
+		foreach ( $plugins as $active_plugin ) {
+			$sanitized_title = sanitize_title( $active_plugin['Name'] );
+			if ( $slug === $sanitized_title ) {
 				$plugin = $active_plugin;
 				break;
 			}

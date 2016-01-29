@@ -27,4 +27,4 @@ if ( class_exists( 'WP_REST_Controller' )
 	require_once dirname( __FILE__ ) . '/lib/class-wp-rest-themes-controller.php';
 }
 
-add_action( 'rest_api_init', plugins_themes_rest_api_init );
+add_action( 'rest_api_init', 'plugins_themes_rest_api_init' );

@@ -73,6 +73,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 		$slug = $request['slug'];
 		$plugin = null;
 
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		$plugins = get_plugins();
 		foreach( $plugins as $name => $active_plugin ) {
 			if( array_values( preg_split( '/\//', $name ) )[0] == $slug ) {

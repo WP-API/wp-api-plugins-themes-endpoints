@@ -79,7 +79,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 		foreach ( $plugins as $active_plugin ) {
 			$sanitized_title = sanitize_title( $active_plugin['Name'] );
-			if( $slug === $sanitized_title ) {
+			if ( $slug === $sanitized_title ) {
 				$plugin = $active_plugin;
 				break;
 			}

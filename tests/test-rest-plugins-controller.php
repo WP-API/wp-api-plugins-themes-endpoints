@@ -1,6 +1,15 @@
 <?php
 
 class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
+	protected $admin_id;
+
+	public function setUp() {
+		parent::setUp();
+
+		$this->admin_id = $this->factory->user->create( array(
+			'role' => 'administrator',
+		) );
+	}
 
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();
@@ -13,10 +22,11 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_items() {
+		wp_set_current_user( $this->admin_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
 		$response = $this->server->dispatch( $request );
 		$data = $response->get_data();
-		$this->assertEquals( 3, count( $data ) );
+		$this->assertEquals( 2, count( $data ) );
 	}
 
 	public function test_get_item() {

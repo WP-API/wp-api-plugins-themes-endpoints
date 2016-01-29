@@ -67,7 +67,7 @@ install_wp() {
 }
 
 install_wp_api() {
-	git clone git@github.com:WP-API/WP-API.git wp-api
+	git clone https://github.com/WP-API/WP-API.git wp-api
 }
 
 install_test_suite() {

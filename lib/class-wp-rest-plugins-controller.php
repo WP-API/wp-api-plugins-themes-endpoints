@@ -44,7 +44,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
-        
+
 		return current_user_can( 'activate_plugins' );
 
 	}
@@ -157,6 +157,9 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 
 	public function prepare_item_for_response( $plugin, $request ) {
+		$data = array(
+			'slug' => $plugin['Name']
+		);
 		return array('plugin' => 'get plugin data');
 	}
 }

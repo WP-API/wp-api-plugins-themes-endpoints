@@ -44,9 +44,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
-
-		return current_user_can( 'update_plugins' );
-
+		return current_user_can( 'manage_options' ); // TODO: Something related to plugins.
 	}
 
 	public function get_items( $request ) {

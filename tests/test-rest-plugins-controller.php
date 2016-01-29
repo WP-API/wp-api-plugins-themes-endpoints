@@ -25,6 +25,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		wp_set_current_user( $this->admin_id );
 		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
 		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 2, count( $data ) );
 	}

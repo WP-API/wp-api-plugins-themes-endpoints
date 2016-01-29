@@ -60,7 +60,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 				continue;
 			}
 
-			$data[ $obj['Name'] ] = $this->prepare_response_for_collection( $plugin );
+			$data[ sanitize_title( $obj['Name'] ) ] = $this->prepare_response_for_collection( $plugin );
 		}
 
 		return rest_ensure_response( $data );

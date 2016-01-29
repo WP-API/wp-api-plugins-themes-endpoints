@@ -40,11 +40,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to read /themes.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		return $this->get_item_permissions_check( $request );
+		if ( !current_user_can( 'switch_themes' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot view the list of themes' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 
@@ -56,11 +60,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to read /theme/{theme-name}
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		return current_user_can( 'switch_themes' );
+		if ( !current_user_can( 'switch_themes' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you do not have access to this resource' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 
@@ -72,11 +80,15 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	 * check if a request can delete a theme
 	 *
 	 * @param WP_REST_Request $request
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function delete_item_permission_check( $request ) {
 
-		return current_user_can( 'delete_themes' );
+		if ( !current_user_can( 'delete_themes' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot delete themes' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 

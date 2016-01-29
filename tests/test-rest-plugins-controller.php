@@ -25,7 +25,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 403, $response->get_status() );
+		$this->assertErrorResponse( 'rest_forbidden', $response, 401 );
 
 	}
 
@@ -93,7 +93,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 403, $response->get_status() );
+		$this->assertErrorResponse( 'rest_forbidden', $response, 401 );
 	}
 
 	protected function check_get_plugins_response( $response, $context = 'view' ) {

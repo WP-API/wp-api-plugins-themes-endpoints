@@ -41,11 +41,15 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * Check if a given request has access to read /plugins.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function get_items_permissions_check( $request ) {
 
-		return current_user_can( 'manage_options' ); // TODO: Something related to plugins.
+		if (!current_user_can( 'manage_options' )) { // TODO: Something related to plugins. activate_plugin capability seems to not be available for multi-site superadmin (?)
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot view the list of plugins' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 
@@ -69,14 +73,16 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	/**
 	 * check if a given request has access to read /plugins/{plugin-name}
 	 *
-	 * TODO: is this the correct capability to use ?
-	 *
 	 * @param WP_REST_Request $request
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function get_item_permissions_check( $request ) {
 
-		return current_user_can( 'activate_plugins' );
+		if (!current_user_can( 'manage_options' )) { // TODO: Something related to plugins. activate_plugin capability seems to not be available for multi-site superadmin (?)
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you do not have access to this resource' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 
@@ -110,11 +116,15 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * check if a given request has access to delete a plugin
 	 *
 	 * @param WP_REST_Request $request
-	 * @return boolean
+	 * @return WP_Error|boolean
 	 */
 	public function delete_item_permission_check( $request ) {
 
-		return current_user_can( 'delete_plugins' );
+		if ( !current_user_can( 'delete_plugins' ) ) {
+			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot delete this plugin' ), array( 'status' => rest_authorization_required_code() ) );
+		}
+
+		return true;
 
 	}
 

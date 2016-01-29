@@ -15,7 +15,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 403, $response->get_status() );
+		$this->assertEquals( 401, $response->get_status() );
 
 	}
 
@@ -27,7 +27,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_TestCase {
 
 		$response = $this->server->dispatch( $request );
 
-		$this->assertEquals( 403, $response->get_status() );
+		$this->assertEquals( 401, $response->get_status() );
 
 	}
 

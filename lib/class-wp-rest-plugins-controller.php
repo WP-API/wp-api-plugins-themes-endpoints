@@ -82,47 +82,47 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 			'title'                => 'plugin',
 			'type'                 => 'object',
 			'properties'           => array(
-				'Name'        => array(
+				'name'        => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'PluginURI'   => array(
+				'plugin_uri'   => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'Version'     => array(
+				'version'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'Description'     => array(
+				'description'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'Author'     => array(
+				'author'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'AuthorURI'     => array(
+				'author_uri'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'TextDomain'     => array(
+				'text_domain'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'DomainPath'     => array(
+				'domain_path'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'Network'     => array(
+				'network'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'Title'     => array(
+				'title'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),
-				'AuthorName'     => array(
+				'author_name'     => array(
 					'description'  => __( 'The title for the resource.' ),
 					'type'         => 'string',
 					),

@@ -22,7 +22,7 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 			'schema' => array( $this, 'get_item_schema' ),
 		) );
 
-		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<slug>[\w-]+)', array(
 			array(
 				'methods'         => WP_REST_Server::READABLE,
 				'callback'        => array( $this, 'get_item' ),
@@ -82,7 +82,7 @@ class WP_REST_Themes_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|boolean
 	 */
-	public function delete_item_permission_check( $request ) {
+	public function delete_item_permissions_check( $request ) {
 
 		if ( !current_user_can( 'delete_themes' ) ) {
 			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot delete themes' ), array( 'status' => rest_authorization_required_code() ) );

@@ -118,13 +118,23 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|boolean
 	 */
-	public function delete_item_permission_check( $request ) {
+	public function delete_item_permissions_check( $request ) {
 
 		if ( !current_user_can( 'delete_plugins' ) ) {
 			return new WP_Error( 'rest_forbidden', __( 'Sorry, you cannot delete this plugin' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
 		return true;
+
+	}
+
+	/**
+	 * Delete a plugin.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function delete_item( $request ) {
 
 	}
 

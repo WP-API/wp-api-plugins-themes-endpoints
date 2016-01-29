@@ -45,6 +45,9 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	public function test_get_item() {
+
+		wp_set_current_user( $this->admin_id );
+
 		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello-dolly' );
 		$response = $this->server->dispatch( $request );
 

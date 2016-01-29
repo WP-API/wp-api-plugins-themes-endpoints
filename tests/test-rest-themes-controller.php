@@ -5,7 +5,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_TestCase {
 	public function test_register_routes() {
 		$routes = $this->server->get_routes();
 		$this->assertArrayHasKey( '/wp/v2/themes', $routes );
-		$this->assertArrayHasKey( '/wp/v2/themes/(?P<id>[\d]+)', $routes );
+		$this->assertArrayHasKey( '/wp/v2/themes/(?P<slug>[\w-]+)', $routes );
 	}
 
 	public function test_get_items_without_permissions() {

@@ -43,6 +43,7 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	public function get_items( $request ) {
 		$data = array();
 
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		foreach ( get_plugins() as $obj ) {
 			$plugin = $this->prepare_item_for_response( $obj, $request );
 			if ( is_wp_error( $plugin ) ) {

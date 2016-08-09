@@ -44,6 +44,131 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( 'Akismet', $data[0]['name'] );
 	}
 
+	/**
+	 * Test pagination args and headers.
+	 */
+	public function test_get_items_pagination_headers() {
+		// Skipped until more plugins are added into wordpress-develop repo.
+
+		wp_set_current_user( $this->admin_id );
+		// One plugin installed by default.
+		$request  = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+		$headers  = $response->get_headers();
+		$this->assertEquals( 2, $headers['X-WP-Total'] );
+		$this->assertEquals( 2, $headers['X-WP-TotalPages'] );
+		$base = add_query_arg( $request->get_query_params(), rest_url( '/wp/v2/plugins' ) );
+		$next_link = add_query_arg( array(
+			'page'    => 2,
+		), $base );
+		$this->assertFalse( stripos( $headers['Link'], 'rel="prev"' ) );
+		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
+		// Middle page doesn't exist because only hello dolly and akismet.
+		/* @TODO Get extra plugins.
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'page', 2 );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+		$headers = $response->get_headers();
+		$this->assertEquals( 6, $headers['X-WP-Total'] );
+		$this->assertEquals( 6, $headers['X-WP-TotalPages'] );
+		$base = add_query_arg( $request->get_query_params(), rest_url( '/wp/v2/plugins' ) );
+		$prev_link = add_query_arg( array(
+			'page'    => 2,
+		), $base );
+		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$next_link = add_query_arg( array(
+			'page'    => 4,
+		), $base );
+		$this->assertContains( '<' . $next_link . '>; rel="next"', $headers['Link'] );
+		*/
+		// Last page
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'page', 2 );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+		$headers = $response->get_headers();
+		$this->assertEquals( 2, $headers['X-WP-Total'] );
+		$this->assertEquals( 2, $headers['X-WP-TotalPages'] );
+		$base = add_query_arg( $request->get_query_params(), rest_url( '/wp/v2/plugins' ) );
+		$prev_link = add_query_arg( array(
+			'page'    => 1,
+		), $base );
+		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
+		// Out of bounds
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'page', 8 );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+		$headers = $response->get_headers();
+		$this->assertEquals( 2, $headers['X-WP-Total'] );
+		$this->assertEquals( 2, $headers['X-WP-TotalPages'] );
+		$base = add_query_arg( $request->get_query_params(), rest_url( '/wp/v2/plugins' ) );
+		$prev_link = add_query_arg( array(
+			'page'    => 2,
+		), $base );
+		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+		$this->assertFalse( stripos( $headers['Link'], 'rel="next"' ) );
+	}
+
+	public function test_get_items_per_page() {
+		wp_set_current_user( $this->admin_id );
+
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 200, $response->get_status() );
+		$this->assertEquals( 2, count( $response->get_data() ) );
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'per_page', 1 );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 1, count( $response->get_data() ) );
+	}
+
+	public function test_get_items_page() {
+		wp_set_current_user( $this->admin_id );
+
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'per_page', 1 );
+		$request->set_param( 'page', 2 );
+		$response = $this->server->dispatch( $request );
+		$this->assertEquals( 1, count( $response->get_data() ) );
+		$base = add_query_arg( $request->get_query_params(), rest_url( '/wp/v2/plugins' ) );
+		$prev_link = add_query_arg( array(
+			'per_page'  => 1,
+			'page'      => 1,
+		), $base );
+		$headers = $response->get_headers();
+		$this->assertContains( '<' . $prev_link . '>; rel="prev"', $headers['Link'] );
+	}
+
+	public function test_get_items_offset() {
+		wp_set_current_user( $this->admin_id );
+
+		// 2 Plugins installed by default.
+		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins' );
+		$request->set_param( 'offset', 1 );
+		$response = $this->server->dispatch( $request );
+		$this->assertCount( 1, $response->get_data() );
+		// 'offset' works with 'per_page'
+		$request->set_param( 'per_page', 2 );
+		$request->set_param( 'offset', 0 );
+		$response = $this->server->dispatch( $request );
+		$this->assertCount( 2, $response->get_data() );
+		// 'offset' takes priority over 'page'
+		$request->set_param( 'page', 2 );
+		$request->set_param( 'per_page', 2 );
+		$request->set_param( 'offset', 1 );
+		$response = $this->server->dispatch( $request );
+		$this->assertCount( 1, $response->get_data() );
+		// Out of bounds.
+		$request->set_param( 'per_page', 1 );
+		$request->set_param( 'offset', 2 );
+		$response = $this->server->dispatch( $request );
+		$this->assertCount( 0, $response->get_data() );
+	}
+
 	public function test_get_item() {
 
 		wp_set_current_user( $this->admin_id );

@@ -199,19 +199,53 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 
 
 	public function prepare_item_for_response( $plugin, $request ) {
-		$data = array(
-			'name'        => $plugin['Name'],
-			'plugin_uri'  => $plugin['PluginURI'],
-			'version'     => $plugin['Version'],
-			'description' => $plugin['Description'],
-			'author'      => $plugin['Author'],
-			'author_uri'  => $plugin['AuthorURI'],
-			'text_domain' => $plugin['TextDomain'],
-			'domain_path' => $plugin['DomainPath'],
-			'network'     => $plugin['Network'],
-			'title'       => $plugin['Title'],
-			'author_name' => $plugin['AuthorName'],
-		);
+		$data = array();
+
+		$schema = $this->get_item_schema();
+
+		if ( isset( $schema['properties']['name'] ) ) {
+			$data['name'] = $plugin['Name'];
+		}
+
+		if ( isset( $schema['properties']['plugin_uri'] ) ) {
+			$data['plugin_uri'] = $plugin['PluginURI'];
+		}
+
+		if ( isset( $schema['properties']['version'] ) ) {
+			$data['version'] = $plugin['Version'];
+		}
+
+		if ( isset( $schema['properties']['description'] ) ) {
+			$data['description'] = $plugin['Description'];
+		}
+
+		if ( isset( $schema['properties']['author'] ) ) {
+			$data['author'] = $plugin['Author'];
+		}
+
+		if ( isset( $schema['properties']['author_uri'] ) ) {
+			$data['author_uri'] = $plugin['AuthorURI'];
+		}
+
+		if ( isset( $schema['properties']['text_domain'] ) ) {
+			$data['text_domain'] = $plugin['TextDomain'];
+		}
+
+		if ( isset( $schema['properties']['domain_path'] ) ) {
+			$data['domain_path'] = $plugin['DomainPath'];
+		}
+
+		if ( isset( $schema['properties']['network'] ) ) {
+			$data['network'] = $plugin['Network'];
+		}
+
+		if ( isset( $schema['properties']['title'] ) ) {
+			$data['title'] = $plugin['Title'];
+		}
+
+		if ( isset( $schema['properties']['author_name'] ) ) {
+			$data['author_name'] = $plugin['AuthorName'];
+		}
 
 		return $data;
 	}

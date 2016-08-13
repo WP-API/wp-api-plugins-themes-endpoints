@@ -40,7 +40,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 2, count( $data ) );
-		$this->assertEquals( 'Akismet', $data[0]['name'] );
+
 		$this->check_get_plugins_response( $response, 'view' );
 	}
 
@@ -128,7 +128,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 	}
 
 	protected function check_plugin_data( $data, $context, $links ) {
-		// @TODO eventually replace with plugin collection.
+		// @TODO Eventually replace with plugin collection.
 		$plugins = get_plugins();
 		$plugin = null;
 		// Match plugin to one from collection and verify data.
@@ -146,7 +146,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( $plugin['Name'], $data['name'] );
 		$this->assertEquals( $plugin['PluginURI'], $data['plugin_uri'] );
 		$this->assertEquals( $plugin['Version'], $data['version'] );
-		// Very strange things happen with plugin description value.
+		// Very strange things happen with plugin description values.
 		$this->assertEquals( strip_tags( $plugin['Description'] ), strip_tags( $data['description'] ) );
 		$this->assertEquals( $plugin['Author'], $data['author'] );
 		$this->assertEquals( $plugin['AuthorURI'], $data['author_uri'] );
@@ -157,15 +157,5 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 
 		// @TODO Handle active, parent, update, autoupdate.
 		// @TODO Handle context params.
-	}
-
-	protected function get_active_plugin() {
-		$plugin_file = WP_PLUGIN_DIR . '/hello.php';
-		$plugin_data = get_plugins();
-		$plugin_data = $plugin_data['hello.php'];
-		//$plugin_data = get_plugin_data( $plugin_file );
-		$plugin_data['path'] = $plugin_file;
-
-		return $plugin_data;
 	}
 }

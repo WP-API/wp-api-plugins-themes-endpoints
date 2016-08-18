@@ -40,8 +40,8 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( 200, $response->get_status() );
 		$data = $response->get_data();
 		$this->assertEquals( 2, count( $data ) );
-		// TODO: Check values.
-		$this->assertEquals( 'Akismet', $data[0]['name'] );
+
+		$this->check_get_plugins_response( $response, 'view' );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$request = new WP_REST_Request( 'GET', '/wp/v2/plugins/hello-dolly' );
 		$response = $this->server->dispatch( $request );
 
-		$this->check_get_plugins_response( $response, 'view' );
+		$this->check_get_plugin_response( $response, 'view' );
 	}
 
 	public function test_create_item() {
@@ -224,17 +224,63 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertErrorResponse( 'rest_forbidden', $response, 401 );
 	}
 
+	/**
+	 * Check response of collections.
+	 */
 	protected function check_get_plugins_response( $response, $context = 'view' ) {
 		$this->assertNotInstanceOf( 'WP_Error', $response );
 		$response = rest_ensure_response( $response );
 		$this->assertEquals( 200, $response->get_status() );
-		$theme_data = $response->get_data();
+		$plugin_data = $response->get_data();
 
-		$plugin = array(); // fixme - get theme object
-		$this->check_plugin_data( $plugin );
+		// For collections loop through each item.
+		foreach ( $plugin_data as $plugin ) {
+			$this->check_plugin_data( $plugin, $context, $response->get_links() );
+		}
 	}
 
-	protected function check_plugin_data( $plugin ) {
-		// todo: add plugin assertions
+	/**
+	 * Check response of single resources.
+	 */
+	protected function check_get_plugin_response( $response, $context = 'view' ) {
+		$this->assertNotInstanceOf( 'WP_Error', $response );
+		$response = rest_ensure_response( $response );
+		$this->assertEquals( 200, $response->get_status() );
+		$plugin_data = $response->get_data();
+
+		// For single responses.
+		$this->check_plugin_data( $plugin_data, $context, $response->get_links() );
+	}
+
+	protected function check_plugin_data( $data, $context, $links ) {
+		// @TODO Eventually replace with plugin collection.
+		$plugins = get_plugins();
+		$plugin = null;
+		// Match plugin to one from collection and verify data.
+		foreach ( $plugins as $path => $plugin_data ) {
+			if ( $data['name'] === $plugin_data['Name'] ) {
+				$plugin         = $plugin_data;
+				$plugin['path'] = $path;
+				break;
+			}
+		}
+
+		// Make sure plugin exists.
+		$this->assertTrue( ! is_null( $plugin ) );
+
+		$this->assertEquals( $plugin['Name'], $data['name'] );
+		$this->assertEquals( $plugin['PluginURI'], $data['plugin_uri'] );
+		$this->assertEquals( $plugin['Version'], $data['version'] );
+		// Very strange things happen with plugin description values.
+		$this->assertEquals( strip_tags( $plugin['Description'] ), strip_tags( $data['description'] ) );
+		$this->assertEquals( $plugin['Author'], $data['author'] );
+		$this->assertEquals( $plugin['AuthorURI'], $data['author_uri'] );
+		$this->assertEquals( $plugin['TextDomain'], $data['text_domain'] );
+		$this->assertEquals( $plugin['DomainPath'], $data['domain_path'] );
+		$this->assertEquals( $plugin['Title'], $data['title'] );
+		$this->assertEquals( $plugin['AuthorName'], $data['author_name'] );
+
+		// @TODO Handle active, parent, update, autoupdate.
+		// @TODO Handle context params.
 	}
 }

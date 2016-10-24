@@ -50,7 +50,14 @@ if ( ! class_exists( 'WP_Test_REST_TestCase' ) ) {
 	require_once WP_API_ROOT . '/tests/class-wp-test-rest-testcase.php';
 }
 
-require_once WP_API_ROOT . '/tests/class-wp-test-rest-controller-testcase.php';
-require_once WP_API_ROOT . '/tests/class-wp-test-rest-post-type-controller-testcase.php';
-require_once WP_API_ROOT . '/tests/class-wp-test-spy-rest-server.php';
-require_once WP_API_ROOT . '/tests/class-wp-rest-test-controller.php';
+if ( ! class_exists( 'WP_Test_REST_Controller_TestCase' ) ) {
+	require_once WP_API_ROOT . '/tests/class-wp-test-rest-controller-testcase.php';
+}
+
+if ( ! class_exists( 'WP_Test_Spy_REST_Server' ) ) {
+	require_once WP_API_ROOT . '/tests/class-wp-test-spy-rest-server.php';
+}
+
+if ( ! class_exists( 'WP_REST_Test_Controller' ) ) {
+	require_once WP_API_ROOT . '/tests/class-wp-rest-test-controller.php';
+}

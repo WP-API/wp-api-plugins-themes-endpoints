@@ -212,6 +212,12 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertArrayHasKey( 'network', $properties );
 		$this->assertArrayHasKey( 'title', $properties );
 		$this->assertArrayHasKey( 'author_name', $properties );
+
+		// Check that the property is readonly.
+		foreach ( $properties as $property ) {
+			$this->assertTrue( isset( $property['readonly'] ) );
+			$this->assertTrue( $property['readonly'] );
+		}
 	}
 
 	public function test_get_items_without_permissions() {

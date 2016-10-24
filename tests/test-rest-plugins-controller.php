@@ -285,6 +285,7 @@ class WP_Test_REST_Plugins_Controller extends WP_Test_REST_Controller_TestCase {
 		$this->assertEquals( $plugin['DomainPath'], $data['domain_path'] );
 		$this->assertEquals( $plugin['Title'], $data['title'] );
 		$this->assertEquals( $plugin['AuthorName'], $data['author_name'] );
+		$this->assertEquals( $plugin['Network'], $data['network'] );
 
 		// @TODO Handle active, parent, update, autoupdate.
 		// @TODO Handle context params.

@@ -57,8 +57,40 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 		$data = array();
 
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
-		foreach ( get_plugins() as $obj ) {
+		$plugins = get_plugins();
+
+		// Exit early if empty set.
+		if ( empty( $plugins ) ) {
+			return rest_ensure_response( $data );
+		}
+
+		// Store pagation values for headers.
+		$total_plugins = count( $plugins );
+		$per_page = (int) $request['per_page'];
+		if ( ! empty( $request['offset'] ) ) {
+			$offset = $request['offset'];
+		} else {
+			$offset = ( $request['page'] - 1 ) * $per_page;
+		}
+		$max_pages = ceil( $total_plugins / $per_page );
+		$page = ceil( ( ( (int) $offset ) / $per_page ) + 1 );
+
+		// Find count to display per page.
+		if ( $page > 1 ) {
+			$length = $total_plugins - $offset;
+			if ( $length > $per_page ) {
+				$length = $per_page;
+			}
+		} else {
+			$length = $total_plugins > $per_page ? $per_page : $total_plugins;
+		}
+
+		// Split plugins array.
+		$plugins = array_slice( $plugins, $offset, $length );
+
+		foreach ( $plugins as $obj ) {
 			$plugin = $this->prepare_item_for_response( $obj, $request );
+
 			if ( is_wp_error( $plugin ) ) {
 				continue;
 			}
@@ -66,7 +98,30 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 			$data[] = $this->prepare_response_for_collection( $plugin );
 		}
 
-		return rest_ensure_response( $data );
+		$response = rest_ensure_response( $data );
+
+		// Add pagination headers to response.
+		$response->header( 'X-WP-Total', (int) $total_plugins );
+		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+
+		// Add pagination link headers to response.
+		$base = add_query_arg( $request->get_query_params(), rest_url( sprintf( '/%s/%s', $this->namespace, $this->rest_base ) ) );
+		if ( $page > 1 ) {
+			$prev_page = $page - 1;
+			if ( $prev_page > $max_pages ) {
+				$prev_page = $max_pages;
+			}
+			$prev_link = add_query_arg( 'page', $prev_page, $base );
+			$response->link_header( 'prev', $prev_link );
+		}
+		if ( $max_pages > $page ) {
+			$next_page = $page + 1;
+			$next_link = add_query_arg( 'page', $next_page, $base );
+			$response->link_header( 'next', $next_link );
+		}
+
+		// Return requested collection.
+		return $response;
 	}
 
 	/**
@@ -194,24 +249,67 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 	}
 
 	public function get_collection_params() {
-		return array();
+		$params = parent::get_collection_params();
+
+		$params['offset'] = array(
+			'description'        => __( 'Offset the result set by a specific number of items.' ),
+			'type'               => 'integer',
+			'sanitize_callback'  => 'absint',
+			'validate_callback'  => 'rest_validate_request_arg',
+		);
+
+		return $params;
 	}
 
 
 	public function prepare_item_for_response( $plugin, $request ) {
-		$data = array(
-			'name'        => $plugin['Name'],
-			'plugin_uri'  => $plugin['PluginURI'],
-			'version'     => $plugin['Version'],
-			'description' => $plugin['Description'],
-			'author'      => $plugin['Author'],
-			'author_uri'  => $plugin['AuthorURI'],
-			'text_domain' => $plugin['TextDomain'],
-			'domain_path' => $plugin['DomainPath'],
-			'network'     => $plugin['Network'],
-			'title'       => $plugin['Title'],
-			'author_name' => $plugin['AuthorName'],
-		);
+		$data = array();
+
+		$schema = $this->get_item_schema();
+
+		if ( isset( $schema['properties']['name'] ) ) {
+			$data['name'] = $plugin['Name'];
+		}
+
+		if ( isset( $schema['properties']['plugin_uri'] ) ) {
+			$data['plugin_uri'] = $plugin['PluginURI'];
+		}
+
+		if ( isset( $schema['properties']['version'] ) ) {
+			$data['version'] = $plugin['Version'];
+		}
+
+		if ( isset( $schema['properties']['description'] ) ) {
+			$data['description'] = $plugin['Description'];
+		}
+
+		if ( isset( $schema['properties']['author'] ) ) {
+			$data['author'] = $plugin['Author'];
+		}
+
+		if ( isset( $schema['properties']['author_uri'] ) ) {
+			$data['author_uri'] = $plugin['AuthorURI'];
+		}
+
+		if ( isset( $schema['properties']['text_domain'] ) ) {
+			$data['text_domain'] = $plugin['TextDomain'];
+		}
+
+		if ( isset( $schema['properties']['domain_path'] ) ) {
+			$data['domain_path'] = $plugin['DomainPath'];
+		}
+
+		if ( isset( $schema['properties']['network'] ) ) {
+			$data['network'] = $plugin['Network'];
+		}
+
+		if ( isset( $schema['properties']['title'] ) ) {
+			$data['title'] = $plugin['Title'];
+		}
+
+		if ( isset( $schema['properties']['author_name'] ) ) {
+			$data['author_name'] = $plugin['AuthorName'];
+		}
 
 		return $data;
 	}

@@ -199,48 +199,62 @@ class WP_REST_Plugins_Controller extends WP_REST_Controller {
 			'type'       => 'object',
 			'properties' => array(
 				'name'        => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'The name of the plugin.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'plugin_uri'  => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'The uri of the plugin.' ),
 					'type'        => 'string',
+					'format'      => 'uri',
+					'readonly'    => true,
 				),
 				'version'     => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'The plugin version.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'description' => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'A short description of the plugin.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'author'      => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Name of plugin author.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'author_uri'  => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Plugin author uri.' ),
 					'type'        => 'string',
+					'format'      => 'uri',
+					'readonly'    => true,
 				),
 				'text_domain' => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Plugin text domain.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'domain_path' => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Path for text domain.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'network'     => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Whether the plugin is forced to be active on the network via plugin headers. This does not indicate whether the plugin is active on the network.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 				'title'       => array(
 					'description' => __( 'The title for the resource.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
+				// @TODO Possibly delete this from schema as it is somewhat duplicate data.
 				'author_name' => array(
-					'description' => __( 'The title for the resource.' ),
+					'description' => __( 'Name of plugin author.' ),
 					'type'        => 'string',
+					'readonly'    => true,
 				),
 			),
 		);
